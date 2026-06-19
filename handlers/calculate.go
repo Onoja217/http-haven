@@ -8,8 +8,19 @@ import (
 
 func Calculate(w http.ResponseWriter, r *http.Request) {
 	op := r.URL.Query().Get("op")
-	a, _ := strconv.Atoi(r.URL.Query().Get("a"))
-	b, _ := strconv.Atoi(r.URL.Query().Get("b"))
+
+	a, errA := strconv.Atoi(r.URL.Query().Get("a"))
+	b, errB := strconv.Atoi(r.URL.Query().Get("b"))
+	
+	fmt.Println("a =", r.URL.Query().Get("a"))
+	fmt.Println("b =", r.URL.Query().Get("b"))
+	fmt.Println("errA =", errA)
+	fmt.Println("errB =", errB)
+
+	if errA != nil || errB != nil {
+		http.Error(w, "invalid parameters", http.StatusBadRequest)
+		return
+	}
 
 	var result int
 
@@ -21,9 +32,9 @@ func Calculate(w http.ResponseWriter, r *http.Request) {
 	case "multiply":
 		result = a * b
 	default:
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "unknown operation", http.StatusBadRequest)
 		return
 	}
 
-	fmt.Fprintf(w, "%d", result)
+	fmt.Fprintf(w, "Result: %d", result)
 }
