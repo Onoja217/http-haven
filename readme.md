@@ -1,51 +1,44 @@
 # http-haven
 
-This project is a simple Go HTTP server built as a set of exercises. It’s mainly for practicing how to build routes, handle requests, work with query parameters, headers, and HTTP status codes using only the Go standard library.
-
----
+This project is a simple Go HTTP server built as a set of exercises. It is designed to help understand core HTTP concepts in Go using only the standard library. It covers routing, query parameters, headers, request methods, status codes, redirects, form parsing, ServeMux sub-routing, and HTML templates.
 
 ## Repo submission
 
-Repo to submit when you’re done: **http-haven**
+Repo to submit when you’re done: http-haven
 
-Each exercise is implemented as part of the project and kept inside the same `http-haven` directory.
-
----
+All exercises are implemented inside a single Go module under the http-haven directory.
 
 ## How to run
 
-Start the server:
+Run the server:
 
-```bash
 go run .
-```
-+ Server runs on:
 
+Server runs on:
 ```
 http://localhost:8080
 ```
-### Project structure
+## Project structure
 
-+ handlers/ → route logic
+handlers/ → all request handlers (business logic)
 
-+ routes/ → route definitions
+routes/ → route registration
 
-+ main.go → entry point
+main.go → application entry point
 
-+ test_endpoints.sh → automated test script
+http-resurgence/ → exercise drafts / workspace files
 
-+ go.mod → Go module file
+test_endpoints.sh → automated test script
 
-### Exercises
+go.mod → Go module definition
+
+## Exercises
 
 1. /ping
 
-+ Simple health check endpoint.
-
-```
 GET /ping
-```
-### Response:
+
++ Response:
 
 ```
 pong
@@ -53,10 +46,11 @@ pong
 
 2. /hello
 
-+ Returns a greeting using query parameters.
++ GET /hello?name=Alice
 
++ Response:
 ```
-GET /hello?name=Alice
+Hello, Alice!
 ```
 + If no name is provided:
 ```
@@ -65,82 +59,141 @@ Hello, Guest!
 
 3. /count
 
-### Counts characters from request body.
++ GET /count → returns instruction message
 
-```
-GET /count
-```
-### Returns instruction message.
-```
-POST /count
-```
-### Returns number of characters in the request body.
++ POST /count → returns number of characters in request body
+
 
 4. /calculate
 
-### Simple math API.
-```
-GET /calculate?op=add&a=10&b=5
-```
-### Supported operations:
-```
-add
-subtract
-multiply
-```
-### Response:
++ GET /calculate?op=add&a=10&b=5
+
++ Supported operations:
+
++ add
+
++ subtract
+
++ multiply
+
++ Response:
 ```
 Result: 15
 ```
-+ Invalid input returns 400 Bad Request.
++ Invalid input returns:
+```
+400 Bad Request
+```
 
 5. /agent
 
-### Returns the client User-Agent.
-```
 GET /agent
-```
-### Response:
+
++ Response:
 ```
 You are visiting us using: <User-Agent>
 ```
+
 6. /dashboard
 
-### Protected route using headers.
++ Header required:
 
-+ Required header:
-```
 X-API-Key: secret123
-```
-### Responses:
-```
-Valid key → Welcome to the secure dashboard
-Invalid/missing → 401 Unauthorized
-```
+
++ Valid:
+
+Welcome to the secure dashboard
+
++ Invalid or missing:
+
+401 Unauthorized
+
+
 7. /legacy → /v2
 
-### Redirect example.
-```
-GET /legacy
-```
-+ Redirects permanently to /v2.
-```
++ GET /legacy
+
+Redirects permanently (301) to:
 /v2
-Welcome to version 2
-Testing
-```
-### Run the automated test script:
+
+Response:
+/v2 → Welcome to version 2
+
+
+8. HTTP Resurgence (Advanced)
+
+method-inspector → returns HTTP method used
+
+echo → echoes POST body
+
+headers → reads custom headers
+
+form → parses form data
+
+status → dynamic HTTP status codes
+
+api/v1/ping → returns pong (ServeMux subtree)
+
+api/v1/greet → greeting endpoint
+
+render → HTML template rendering
+
+## Key Concepts Practiced
+
+HTTP routing using net/http
+
+Query parameters (r.URL.Query)
+
+Headers (r.Header.Get)
+
+HTTP methods (r.Method)
+
+Status codes (http.Status*)
+
+Request body handling (io.ReadAll)
+
+Form parsing (r.ParseForm)
+
+Redirects (http.Redirect)
+
+ServeMux subtree routing
+
+HTML templates (html/template)
+
+## Testing
+
+chmod +x test_endpoints.sh
 ```
 ./test_endpoints.sh
 ```
-+ It validates all endpoints from Exercise 1 to 7.
++ The script validates:
 
-### Notes
+All 7 core endpoints
 
-+ Built using only Go standard library
+All HTTP Resurgence endpoints
 
-+ No frameworks used
+Correct status codes, headers, and responses
 
-+ One server, multiple endpoints
+## Notes
 
-+ Focus is understanding HTTP fundamentals in Go
+Built using only Go standard library
+
+No frameworks used
+
+Single server architecture
+
+Focus is HTTP fundamentals
+
+Designed for backend learning progression
+
+## Final Goal
+
+By completing this project you should understand:
+
+How HTTP servers work internally in Go
+
+How routing works under the hood
+
+How headers, methods, and status codes behave
+
+How real backend APIs are built from scratch
