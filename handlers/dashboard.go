@@ -5,10 +5,12 @@ import (
 )
 
 func Dashboard(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("X-API-Key") != "secret123" {
-		w.WriteHeader(http.StatusUnauthorized)
+	key := r.Header.Get("X-API-Key")
+
+	if key != "secret123" {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	w.Write([]byte("Welcome"))
+	w.Write([]byte("Welcome to dashboard"))
 }
